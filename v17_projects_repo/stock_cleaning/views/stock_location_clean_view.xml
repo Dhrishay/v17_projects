@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="stock_location_clean_form_view" model="ir.ui.view">
+        <field name="name">stock.location.clean.form.view</field>
+        <field name="model">stock.location.clean</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="status" widget="statusbar"/>
+                    <button name="action_confirm" type="object" string="Confirm" invisible="status != 'draft'"/>
+                    <button name="action_done" type="object" string="Done"/>
+                    <button name="action_set_to_draft" type="object" string="Set To Draft" invisible="status != 'done'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="stock_location_id" domain="[('usage', '=', 'internal')]"/>
+                        <field name="date"/>
+                    </group>
+                <notebook>
+                    <page string="Cleaning Products" name="cleaning_products" invisible="status != 'done'">
+                        <field name="stock_line_ids">
+                            <tree editable="bottom">
+                                <field name="product_id"/>
+                                <field name="lot_serial_id"/>
+                                <field name="time_of_production"/>
+                                <field name="total_weight"/>
+                                <field name="sale_order_id"/>
+                                <field name="purchase_order_id"/>
+                                <field name="partner_id"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="stock_location_clean_tree_view" model="ir.ui.view">
+        <field name="name">stock.location.clean.tree.view</field>
+        <field name="model">stock.location.clean</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="stock_location_id"/>
+                <field name="date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="stock_location_clean_action" model="ir.actions.act_window">
+        <field name="name">Cleaning Location</field>
+        <field name="res_model">stock.location.clean</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="stock.menu_stock_cleaning" action='stock_location_clean_action' name="Cleaning Location" sequence="100" parent="stock.menu_stock_root"/>
+</odoo>
