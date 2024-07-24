@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--    done-->
+    <data noupdate="0">
+        <record id="crm_category_customer" model="crm.tag">
+            <field name="name">Customer</field>
+            <field name="color" eval="15"/>
+        </record>
+    </data>
+</odoo>

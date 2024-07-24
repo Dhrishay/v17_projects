@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--    form view of Mpesa-->
+    <record id="view_mpesa_form" model="ir.ui.view">
+        <field name="name">view.mpesa.form</field>
+        <field name="model">mpesa.payment</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_post" type="object" string="Post" invisible="state != 'draft'"/>
+                    <button name="cancel" type="object" string="Cancel" invisible="state == 'cancelled'"/>
+                    <button name="reset_to_draft" type="object" string="Draft" invisible="state in ['draft', 'posted']"/>
+                    <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
+                </header>
+                <field name="salesrep_partner_id" invisible="1"/>
+                <field name="cash_account_id" invisible="1"/>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_payment" type="object" icon="fa-sitemap" class="oe_stat_button"
+                        invisible="payment_count == 0">
+                            <field string="Payments" name="payment_count" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" readonly="True"/>
+                            <field name="route_id" required="1" readonly="state in ['cancelled', 'posted']"/>
+                            <field name="currency_id" readonly="state in ['cancelled', 'posted']"/>
+                            <field name="phone_number" readonly="state in ['cancelled', 'posted']"/>
+                            <field name="payment_method_id"
+                                   domain="[('type', 'in', ['bank','cash']),('mpesa_reconciliation','=',False),('route_ids','=',route_id)]"
+                                   readonly="state in ['cancelled', 'posted']" required="1"/>
+                            <field name="company_id" readonly="state in ['cancelled', 'posted']"/>
+                        </group>
+                        <group>
+                            <field name = "salesrep_id" required ="1" readonly="state in ['cancelled', 'posted']"/>
+                            <field name = "date" readonly="state in ['cancelled', 'posted']" required="1"/>
+                            <field name = "amount" widget="monetary" readonly="state in ['cancelled', 'posted']"/>
+                            <field name = "mpesa_ref" required ="1" readonly="state in ['cancelled', 'posted']"/>
+                            <field name = "cash_payment_method_id" domain="[('type', '=','cash'),('mpesa_reconciliation','=',True),('route_ids','=',route_id)]"
+                            readonly="state in ['cancelled', 'posted']" required="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                            <page name="pg_customer_payments" string="Payments">
+                                <field name="customer_payments_ids"
+                                    domain="[('reconciled','=',False),('account_id','=',cash_account_id),('partner_id','=',salesrep_partner_id),('move_id.state','=','posted')]"
+                                    readonly="state in ['cancelled', 'posted']">
+                                    <tree create="0">
+                                        <field name="account_id" />
+                                        <field name="partner_id" />
+                                        <field name="name"/>
+                                        <field name="currency_id"/>
+                                        <field name="debit"/>
+                                        <field name="credit"/>
+                                        <field name="matching_number"/>
+                                    </tree>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="total_amount"/>
+                                </group>
+                            </page>
+                        </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+<!--    tree view of Mpesa-->
+     <record id="view_mpesa_tree" model="ir.ui.view">
+        <field name="name">view.mpesa.tree</field>
+        <field name="model">mpesa.payment</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name = "name"/>
+                <field name = "salesrep_id"/>
+                <field name = "route_id"/>
+                <field name = "date"/>
+                <field name = "amount"/>
+                <field name = "phone_number"/>
+                <field name = "mpesa_ref"/>
+            </tree>
+        </field>
+    </record>
+
+<!--    action of Mpesa-->
+    <record id="action_mpesa" model="ir.actions.act_window">
+        <field name="name">Mpesa Payment</field>
+        <field name="res_model">mpesa.payment</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+<!--    custom action of journal entries for mpesa-->
+    <record id="action_move_journal_line_inherit" model="ir.actions.act_window">
+            <field name="name">Journal Entries</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="view_id" ref="account.view_move_tree"/>
+            <field name="search_view_id" ref="account.view_account_move_filter"/>
+            <field name="context">{'default_move_type': 'entry', 'view_no_maturity': True}</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a journal entry
+              </p><p>
+                A journal entry consists of several journal items, each of
+                which is either a debit or a credit transaction.
+              </p>
+            </field>
+        </record>
+
+<!--    menu of Mpesa-->
+    <menuitem id="menu_mpesa"
+        action="action_mpesa"
+        name="Mpesa Payment" parent="account.menu_finance_entries"/>
+
+</odoo>

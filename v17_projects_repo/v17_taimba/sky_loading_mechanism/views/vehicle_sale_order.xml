@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_sale_order_driver_form" model="ir.ui.view">
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='sale_shipping']//field[@name='warehouse_id'][2]" position="attributes">
+                    <attribute name="domain">[('route','=',False),('company_id','in',[company_id,False])]</attribute>
+                </xpath>
+                <xpath expr="//field[@name='warehouse_id']" position="before">
+                    <field name="vehicle_id" readonly="state in ['cancel', 'sent','sale']"/>
+                    <field name="driver_id" domain="[('is_drivers','=','yes')]"
+                           readonly="state in ['cancel', 'sent','sale']"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="server_action_set_route_sale_order_sale_order" model="ir.actions.server">
+            <field name="name">Set Route Contact</field>
+            <field name="model_id" ref="model_sale_order"/>
+            <field name="binding_model_id" ref="model_sale_order"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+                action = records.contact_route()
+            </field>
+        </record>
+    </data>
+</odoo>

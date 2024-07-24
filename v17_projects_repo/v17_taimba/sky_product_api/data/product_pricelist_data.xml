@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+         <record id="list0" model="product.pricelist">
+            <field name="name">Public Pricelist</field>
+            <field name="sequence">1</field>
+        </record>
+    </data>
+</odoo>

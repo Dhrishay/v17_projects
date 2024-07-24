@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <!--Inherited Invoice View-->
+    <record id="view_account_form" model="ir.ui.view">
+        <field name="name">view.account.move</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="context">
+                    {'res_partner_search_mode': (context.get('default_move_type', 'entry') in ('out_invoice',
+                    'out_refund', 'out_receipt') and 'customer') or (context.get('default_move_type', 'entry') in
+                    ('in_invoice', 'in_refund', 'in_receipt') and 'supplier') or False,'show_address': 1,
+                    'default_is_company': True, 'show_vat': True,
+                    'default_supplier_rank_boolean':
+                    (context.get('default_move_type', 'entry') in ('out_invoice', 'out_refund', 'out_receipt') and
+                    False) or (context.get('default_move_type', 'entry') in ('in_invoice', 'in_refund', 'in_receipt')
+                    and True),
+                    'default_customer_rank_boolean':
+                    (context.get('default_move_type', 'entry') in ('out_invoice', 'out_refund', 'out_receipt') and
+                    True) or (context.get('default_move_type', 'entry') in ('in_invoice', 'in_refund', 'in_receipt')
+                    and False),
+                    'default_supplier_rank': (context.get('default_move_type', 'entry') in ('out_invoice', 'out_refund',
+                    'out_receipt') and 0) or (context.get('default_move_type', 'entry') in ('in_invoice', 'in_refund',
+                    'in_receipt') and 1),
+                    'default_customer_rank': (context.get('default_move_type', 'entry') in ('out_invoice', 'out_refund',
+                    'out_receipt') and 1) or (context.get('default_move_type', 'entry') in ('in_invoice', 'in_refund',
+                    'in_receipt') and 0),
+                    'move_type': move_type
+                    }
+                </attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--    Inherited view of Account Payment to pass the context on partner-->
+    <record id="view_account_payment_form_inherit_customer" model="ir.ui.view">
+        <field name="name">account.payment.form.inherit.customer</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id'][1]" position="attributes">
+                <attribute name="context">{'default_is_company': True, 'payment_type':payment_type}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id'][2]" position="attributes">
+                <attribute name="context">{'default_is_company': True, 'payment_type':payment_type}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="account.res_partner_action_customer" model="ir.actions.act_window">
+        <field name="context">{'search_default_customer': 1,'res_partner_search_mode': 'customer', 'default_is_company':
+            True, 'default_customer_rank': 1, 'default_is_customer': True}
+        </field>
+    </record>
+
+    <record id="account.res_partner_action_supplier" model="ir.actions.act_window">
+        <field name="context">{'search_default_supplier': 1,'res_partner_search_mode': 'supplier', 'default_is_company':
+            True, 'default_supplier_rank': 1, 'default_is_vendor': True}
+        </field>
+    </record>
+</odoo>

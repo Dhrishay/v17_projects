@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_inventory_driver_form" model="ir.ui.view">
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+        	<xpath expr="//field[@name='location_dest_id']" position="after">
+                <field name="driver_id" domain ="[('is_drivers','=',True)]"
+                       readonly="state in ['done', 'cancel', 'waiting','confirmed','assigned']"/>
+                    <field name="vehicle_id"
+                           readonly="state in ['done', 'cancel', 'waiting','confirmed','assigned']"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

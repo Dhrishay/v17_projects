@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--    done-->
+<!--    form view of Customer Type-->
+    <record id="view_customer_type_form" model="ir.ui.view">
+        <field name="name">view.customer.type.form</field>
+        <field name="model">customer.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name = "customer_type"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+<!--    tree view of customer type-->
+     <record id="view_customer_type_tree" model="ir.ui.view">
+        <field name="name">view.customer.type.tree</field>
+        <field name="model">customer.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name = "customer_type"/>
+            </tree>
+        </field>
+    </record>
+
+<!--    action of customer type-->
+    <record id="action_customer_type" model="ir.actions.act_window">
+        <field name="name">Customer Types</field>
+        <field name="res_model">customer.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+<!--    menu of customer type-->
+    <menuitem id="menu_partner_contact_type_form"
+        action="action_customer_type"
+        name="Customer Types"
+        sequence="11" parent="contacts.res_partner_menu_config"/>
+
+</odoo>

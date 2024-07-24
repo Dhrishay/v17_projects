@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_account_payment_ref_form" model="ir.ui.view">
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='ref']" position="after">
+                <field name="driver_id" domain="[('is_drivers','=',True)]"/>
+                <field name="vehicle_id"/>
+                <field name="route_id"/>
+                <field name="pay_ref"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

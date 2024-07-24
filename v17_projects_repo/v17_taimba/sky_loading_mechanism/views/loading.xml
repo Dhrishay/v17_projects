@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="loading_stock_form_view" model="ir.ui.view">
+            <field name="name">loading.stock.form.view</field>
+            <field name="model">stock.loading</field>
+            <field name="arch" type="xml">
+                <form string="Loading">
+                    <header>
+                        <button name="confirm_mechanism" type="object" string="Confirm"
+                                invisible="state == 'confirmed'" class="oe_highlight"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <field name="picking_ids" invisible="1"/>
+                            <button type="object" name="action_view_delivery_loading" class="oe_stat_button"
+                                    icon="fa-truck"
+                                    invisible="delivery_count == 0 and state == 'draft'">
+                                <field name="delivery_count" widget="statinfo" string="Delivery"
+                                       invisible="delivery_count == 0 and state == 'draft'"/>
+                            </button>
+                        </div>
+                        <h1>
+                            <field name="sequence_id" readonly="1"/>
+                        </h1>
+                        <group>
+                            <group>
+
+                                <field name="type" invisible="1"/>
+                                <field name="source_warehouse_id" required="1" string="Warehouse"
+                                       readonly="state == 'confirmed'"/>
+                                <field name="vehicle_id" required="1" readonly="state == 'confirmed'"/>
+                                <field name="destination_warehouse_id"
+                                       domain="[('id','!=',source_warehouse_id),('vehicle','=',1)]"
+                                       required="1" invisible="1" readonly="state == 'confirmed'"/>
+                            </group>
+                            <group>
+                                <field name="date" required="1" readonly="state == 'confirmed'"/>
+                                <field name="driver_id" domain="[('is_drivers','=',True)]" readonly="state == 'confirmed'"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="pg_prod" string="Products">
+                                <field name="stock_loading_unloading_lines" readonly="state == 'confirmed'">
+                                    <tree editable="bottom">
+                                        <field name="product_id" required="True"
+                                               domain="[('product_tmpl_id.type','=','product')]"/>
+                                        <field name="lot_id" context="{'available_lot':True}" domain="[('product_id','=',product_id)]"/>
+<!--                                               domain="[('product_id','=',product_id)]" -->
+                                        <field name="quantity"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="pg_token" string="Token">
+                                <field name="handshaketoken" readonly="1"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="loading_stock_tree_view" model="ir.ui.view">
+            <field name="name">loading.stock.tree.view</field>
+            <field name="model">stock.loading</field>
+            <field name="arch" type="xml">
+                <tree string="Loading">
+                    <field name="sequence_id" string="Loading No."/>
+                    <field name="date"/>
+                    <field name="driver_id"/>
+                    <field name="source_warehouse_id" string="Warehouse"/>
+                    <field name="destination_warehouse_id" string="Vehicle"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="loading_stock_search_view" model="ir.ui.view">
+            <field name="name">loading.stock.search.view</field>
+            <field name="model">stock.loading</field>
+            <field name="arch" type="xml">
+                <search string="Loading">
+                    <field name="sequence_id" string="Loading No."/>
+                    <field name="date"/>
+                    <field name="driver_id"/>
+                    <field name="source_warehouse_id" string="Warehouse"/>
+                    <field name="destination_warehouse_id" string="Vehicle"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Driver" name="groupby_driver_id"
+                                domain="[]" context="{'group_by': 'driver_id'}"/>
+                        <filter string="Warehouse" name="groupby_source_warehouse_id"
+                                domain="[]" context="{'group_by':'source_warehouse_id'}"/>
+                        <filter string="Vehicle" name="groupby_destination_warehouse_id"
+                                domain="[]" context="{'group_by':'destination_warehouse_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="loading_stock_act_window" model="ir.actions.act_window">
+            <field name="name">Loading</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.loading</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+    (0, 0, {'view_mode': 'tree', 'view_id': ref('sky_loading_mechanism.loading_stock_tree_view')}),
+    (0, 0, {'view_mode': 'form', 'view_id': ref('sky_loading_mechanism.loading_stock_form_view')})]"/>
+            <field name="domain">[('type', '=', 'loading')]</field>
+            <field name="context">{'default_type': 'loading'}</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+<!--        <record id="action_loading_tree_all" model="ir.actions.act_window">-->
+<!--            <field name="name">Loading</field>-->
+<!--            <field name="res_model">stock.loading</field>-->
+<!--            <field name="type">ir.actions.act_window</field>-->
+<!--            <field name="view_mode">tree,form</field>-->
+<!--            <field name="domain"></field>-->
+<!--            <field name="context">{'contact_display': 'partner_address',-->
+<!--                                   'default_company_id': allowed_company_ids[0]}</field>-->
+
+<!--        </record>-->
+
+
+        <menuitem name="Loading Orders " id="taimba_loading_menu" parent="stock.menu_stock_warehouse_mgmt"
+                  action="loading_stock_act_window"/>
+
+    </data>
+</odoo>
+

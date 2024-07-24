@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--    done-->
+    <record id="res_config_settings_view_form_so_expiry" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.so.expiry</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="sale.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@name='quotation_order_setting_container']" position="inside">
+                <div class="col-12 col-lg-6 o_setting_box" id="quotation_expiry_day">
+                    <div class="o_setting_left_pane">
+                        <field name="so_expiry"/>
+                    </div>
+                    <div class="o_setting_right_pane">
+                        <label for="so_expiration_hours"/>
+                        <span class="fa fa-lg fa-building-o" title="Values set here are company-specific."
+                              aria-label="Values set here are company-specific." groups="base.group_multi_company"
+                              role="img"/>
+                        <div class="text-muted">
+                            Quotation Cancelled After (Days)
+                        </div>
+                        <div class="content-group" invisible="not so_expiry">
+<!--                             attrs="{'invisible': [('so_expiry','=',False)]}">-->
+                            <div class="mt16">
+                                <span class="col-lg-3">Default Limit:
+                                    <field name="so_expiration_hours" required="so_expiry"/>
+<!--                                           attrs="{'required': [('so_expiry', '=', True)]}"/>-->
+                                    Hours
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

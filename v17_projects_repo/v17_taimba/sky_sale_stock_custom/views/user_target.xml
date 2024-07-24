@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="Sales_Target_form_view" model="ir.ui.view">
+            <field name="name">sales.target.form</field>
+            <field name="model">sales.target</field>
+            <field name="arch" type="xml">
+                <form string="Sales Target">
+                    <header>
+                        <button name="action_confirm" type="object" string="Confirmed"
+                                class="oe_highlight" invisible="state != 'draft'"/>
+                        <button name="action_cancel" type="object" string="Cancel"
+                                class="oe_highlight" invisible="(state != 'draft' and state != 'confirm')"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                        <group>
+                        	<field name="route_id" required="1" readonly="state == 'confirm' and 'cancel'" domain ="[('route','=',True)]"/>
+                            <field name="start_date" required="1" readonly="state == 'confirm' and 'cancel'"/>
+                            <field name="currency_id" readonly="state == 'confirm' and 'cancel'"/>
+                            <field name="work_day" readonly="state == 'confirm' and 'cancel'"/>
+                        </group>
+                         <group>
+                             <field name="user_id" required="1" readonly="state == 'confirm' and 'cancel'"
+                             domain= "[('route_ids','in',route_id)]"/>
+                             <field name="end_date" required="1" readonly="state == 'confirm' and 'cancel'"/>
+                             <field name="total_target"/>
+                             <field name="daily_target"/>
+                        </group>
+                        </group>
+                        <notebook>
+                            <page string="Target Line">
+                                <field name="lines_ids" readonly="state == 'confirm' and 'cancel'">
+                                    <tree editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="sales_qty"/>
+                                        <field name="uom"/>
+                                        <field name="price"/>
+                                        <field name="sub_total"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="Sales_Target_tree_view" model="ir.ui.view">
+            <field name="name">sales.target.tree</field>
+            <field name="model">sales.target</field>
+            <field name="arch" type="xml">
+                <tree string="Sales Target">
+                    <field name="name"/>
+                    <field name="user_id"/>
+                    <field name="route_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="daily_target"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="Sales_Target_search_view" model="ir.ui.view">
+            <field name="name">sales.target.search</field>
+            <field name="model">sales.target</field>
+            <field name="arch" type="xml">
+                <search string="Sales Target">
+                    <field name="user_id"/>
+                    <field name="route_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="total_target"/>
+                    <separator/>
+                    <filter string="Current and last months" name="start_date"
+                            domain="[
+                            ('start_date','&gt;=',(context_today()-relativedelta(months=1)).strftime('%Y-%m-01')),
+                            ('start_date','&lt;',(context_today()+relativedelta(months=1)).strftime('%Y-%m-01'))
+                            ]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="SalesRep" name="user_id" context="{'group_by':'user_id'}"/>
+                        <filter string="Route" name="route_id" context="{'group_by':'route_id'}"/>
+                        <filter string="Start Date" name="start_date" context="{'group_by':'start_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_sales_target" model="ir.actions.act_window">
+            <field name="name">Sales Target</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sales.target</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="Target" id="sales_target_root" parent="sale.sale_menu_root" sequence="31"/>
+        <menuitem name="Sales Target" id="target_main_menu" parent="sales_target_root" action="action_sales_target"/>
+
+    </data>
+</odoo>

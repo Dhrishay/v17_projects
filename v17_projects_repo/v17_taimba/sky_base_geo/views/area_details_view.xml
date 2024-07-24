@@ -1,0 +1,14 @@
+<odoo>
+	<record id="action_partner_area" model="ir.actions.act_window">
+            <field name="name">Area</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">area.area</field>
+            <field name="help">Display and manage the list of all Area. 
+            You can create or delete area to make sure the ones you are working on will be maintained.</field>
+    </record>
+        
+     <menuitem id="menu_area"
+        action="action_partner_area"
+        name="Area" parent="contacts.menu_localisation"
+        sequence="100"/>
+</odoo>

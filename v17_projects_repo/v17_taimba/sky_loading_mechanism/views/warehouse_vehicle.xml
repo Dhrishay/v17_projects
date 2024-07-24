@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_warehouse_vehicle_true_form" model="ir.ui.view">
+        <field name="model">stock.warehouse</field>
+        <field name="inherit_id" ref="stock.view_warehouse"/>
+        <field name="arch" type="xml">
+        	<xpath expr="//field[@name='partner_id']" position="after">
+                 <field name="vehicle"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_vehicle_warehouse_form" model="ir.actions.act_window">
+        <field name="name">Vehicle Warehouses</field>
+        <field name="res_model">stock.warehouse</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('vehicle','=',True)]</field>
+        <field name="context">{'default_vehicle': True, 'create': False, 'edit': False, 'delete': False}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                    This is showing only Vehicle Warehouse.
+            </p>
+        </field>
+    </record>
+
+    <menuitem name="Vehicle Warehouses" action="action_vehicle_warehouse_form" id="menu_vehicle_warehouse_form" parent="stock.menu_warehouse_config" sequence="8"/>
+
+    `<record id="action_route_warehouse_form" model="ir.actions.act_window">
+        <field name="name">Routes Warehouse</field>
+        <field name="res_model">stock.warehouse</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('route','=',True)]</field>
+        <field name="context">{'default_route': True}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                    This is showing only Route Warehouse.
+            </p>
+        </field>
+    </record>`
+
+    <menuitem name="Routes Warehouses" action="action_route_warehouse_form" id="menu_route_warehouse_form" parent="stock.menu_warehouse_config" sequence="9"/>
+
+    <record id="stock.action_warehouse_form" model="ir.actions.act_window">
+            <field name="name">Warehouses</field>
+            <field name="res_model">stock.warehouse</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_id" ref="stock.view_warehouse_tree"/>
+            <field name="domain">[('route','=',False),('vehicle','=',False)]</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Define a new warehouse
+              </p>
+            </field>
+        </record>
+
+    <menuitem id="stock.menu_routes_config" action="stock.action_routes_form" name="Location Routes" parent="stock.menu_warehouse_config" sequence="7" groups="stock.group_adv_location"/>
+    <menuitem action="stock.action_location_form" id="stock.menu_action_location_form" parent="stock.menu_warehouse_config" sequence="4" groups="stock.group_stock_multi_locations"/>
+    <menuitem id="stock.menu_putaway" name="Putaway Rules" parent="stock.menu_warehouse_config" action="stock.action_putaway_tree" sequence="6" groups="stock.group_stock_multi_locations"/>
+    <menuitem action="stock.action_rules_form" id="stock.menu_action_rules_form" parent="stock.menu_warehouse_config" sequence="8" groups="stock.group_adv_location"/>
+    <menuitem id="stock.menu_pickingtype" name="Operations Types" parent="stock.menu_warehouse_config" action="stock.action_picking_type_list" sequence="5"/>
+</odoo>

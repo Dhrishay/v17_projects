@@ -1,0 +1,24 @@
+<odoo>
+    <data noupdate="0">
+    <!--    SEQUENCE1 FOR MEMBERS-->
+        <record id="loading_sequences" model="ir.sequence">
+            <field name="name">Loading Sequence</field>
+            <field name="code">loading.sequences</field>
+            <field name="prefix">LD/%(year)s/</field>
+            <field name="suffix"></field>
+            <field name="padding">5</field>
+            <field eval="1" name="number_next"/>
+            <field eval="1" name="number_increment"/>
+        </record>
+        
+         <record id="unloading_sequences" model="ir.sequence">
+            <field name="name">Unloading Sequence</field>
+            <field name="code">unloading.sequences</field>
+            <field name="prefix">UNLD/ %(year)s/</field>
+            <field name="suffix"></field>
+            <field name="padding">5</field>
+            <field eval="1" name="number_next"/>
+            <field eval="1" name="number_increment"/>
+        </record>
+    </data>
+</odoo>

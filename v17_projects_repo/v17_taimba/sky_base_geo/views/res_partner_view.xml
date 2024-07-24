@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_partner_form_base_geo_new" model="ir.ui.view">
+        <field name="name">res.partner.geo.inherit.new</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base_address_extended.address_street_extended_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='city']" position="attributes">
+                <attribute name="invisible">not country_enforce_cities</attribute>
+            </xpath>
+            <xpath expr="//field[@name='city_id']" position="attributes">
+                <attribute name="invisible">False</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_partner_extended_form_inherited" model="ir.ui.view">
+        <field name="name">view.partner.extended.form.inherited</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base_address_extended.address_street_extended_city_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='city']" position="attributes">
+                <attribute name="invisible">not country_enforce_cities</attribute>
+            </xpath>
+             <xpath expr="//field[@name='city_id']" position="attributes">
+                <attribute name="invisible">False</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_partner_form_base_geo_new" model="ir.ui.view">
+        <field name="name">res.partner.geo.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('o_address_format')]//field[@name='street2']" position="after">
+                    <field name="area_id" placeholder="Area..." class="o_address_city"
+                           readonly="type == 'contact' and parent_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_partner_search_base_geo" model="ir.ui.view">
+        <field name="name">res.partner.search.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='group_country']" position="after">
+                <filter name="group_area" string="Area" context="{'group_by': 'area_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_users_from_base" model="ir.ui.view">
+        <field name="name">res.users.from.inherit</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="/form/sheet/div/group/field[@name='partner_id']" position="after">
+                <field name="area_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_order_search_inherit1" model="ir.ui.view">
+        <field name="name">sale.order.search.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='order_month']" position="after">
+                <filter string="Area" name="order_month" domain="[]" context="{'group_by': 'area_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_order_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="area_id"/>
+            </xpath>
+        </field>
+    </record>
+	
+</odoo>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!--Search view of partner -->
+    <record id="res_partner_search" model="ir.ui.view">
+        <field name="name">res.partner.search</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='customer']" position="before">
+                <filter string="Customers" name="customer_rank_boolean" domain="[('is_customer','=',True)]"/>
+                <filter string="Vendors" name="supplier_rank_boolean" domain="[('is_vendor','=',True)]"/>
+                <separator/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit form view of partner-->
+    <record id="view_partner_inherit_form" model="ir.ui.view">
+        <field name="name">res.partner.rank.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[@name='sales_purchases']/group/group[@name='sale']" position="inside">
+                <field name="customer_rank" invisible="1"/>
+                <field name="is_customer"/>
+            </xpath>
+            <xpath expr="//notebook/page[@name='sales_purchases']/group/group[@name='purchase']" position="inside">
+                <field name="supplier_rank" invisible="1"/>
+                <field name="is_vendor"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

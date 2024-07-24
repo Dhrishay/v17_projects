@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_gpm_product_report,access_gpm_product_report,model_gpm_product_report,,1,1,1,1
+access_gpm_customer_report,access_gpm_customer_report,model_gpm_customer_report,,1,1,1,1
+
+
